@@ -142,10 +142,12 @@ nav.main a.cta:hover{background:var(--ink);color:var(--paper)}
 
 /* sections */
 section{padding:66px 0 0;scroll-margin-top:62px;--sec:var(--indigo)}
-#summary,#lineages,#samples{--sec:var(--teal)}
-#composition{--sec:var(--amber)}
-#downloads,#about,#team{--sec:var(--accent)}
+/* section accent follows the four tile colours:
+   teal = cells & annotation · indigo = expression · crimson = tissue · amber = resources */
+#lineages,#states,#samples{--sec:var(--teal)}
 #explore,#markers{--sec:var(--indigo)}
+#summary,#spatial{--sec:var(--accent)}
+#composition,#downloads,#about,#team{--sec:var(--amber)}
 .shead{display:flex;align-items:center;justify-content:space-between;gap:24px;
   flex-wrap:wrap;margin-bottom:22px}
 h2{font-size:25px;font-weight:600;letter-spacing:-.018em;margin:0;line-height:1.2}
@@ -406,6 +408,7 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
 .pager span{color:var(--faint);padding:0 2px}
 .pubcard p.tight{font-size:13.5px;line-height:1.62}
 .instplate img{max-width:100%;max-height:64px;object-fit:contain;display:block;margin:0 auto}
+.instplate{min-height:86px;display:grid;place-items:center}
 .instrow.four{grid-template-columns:repeat(4,1fr)}
 @media(max-width:900px){.instrow.four{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.instrow.four{grid-template-columns:1fr}}
@@ -479,15 +482,15 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
 
 <div class="container">
   <div class="tiles">
-    <a class="tile t-indigo" href="#explore">
-      <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
-      <div class="h">Gene expression</div>
-      <div class="d">Search a gene, see it across the atlas</div>
-    </a>
     <a class="tile t-teal" href="#lineages">
       <div class="ic"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3.2"/><circle cx="16.5" cy="9" r="2.4"/><circle cx="11" cy="16.5" r="2.8"/></svg></div>
       <div class="h">Lineages</div>
       <div class="d">Twelve cardiac lineages, harmonised across species</div>
+    </a>
+    <a class="tile t-indigo" href="#explore">
+      <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+      <div class="h">Gene expression</div>
+      <div class="d">Search a gene, see it across the atlas</div>
     </a>
     <a class="tile t-crimson" href="#spatial">
       <div class="ic"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M9 3.5v17M3.5 9h17"/></svg></div>
@@ -803,15 +806,13 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
   </div>
 
   <p class="sline" style="margin-top:26px">Supported by:</p>
-  <div class="instrow four">
+  <div class="instrow">
     <div class="instcard"><div class="instplate"><img src="img/logo-cvi.png" alt="Stanford Cardiovascular Institute"></div>
       <div><div class="nm">Stanford Cardiovascular Institute</div></div></div>
     <div class="instcard"><div class="instplate"><img src="img/logo-med.png" alt="Stanford Medicine"></div>
       <div><div class="nm">Stanford Medicine</div></div></div>
     <div class="instcard"><div class="instplate"><img src="img/logo-nhlbi.png" alt="NIH National Heart, Lung, and Blood Institute"></div>
       <div><div class="nm">NIH NHLBI</div></div></div>
-    <div class="instcard"><div class="instplate"><img src="img/logo-ku.png" alt="Korea University"></div>
-      <div><div class="nm">Korea University</div></div></div>
   </div>
 
   <div class="people">
