@@ -238,8 +238,8 @@ input[type=range].ptsize::-moz-range-thumb{width:13px;height:13px;border-radius:
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted)}
 .legend span{display:flex;align-items:center;gap:7px}
 .scale{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--faint)}
-.scalebar{width:100px;height:9px;border-radius:2px;border:1px solid var(--line);
-  background:linear-gradient(90deg,var(--seq-lo),var(--seq-hi))}
+.scalebar{width:110px;height:10px;border-radius:2px;border:1px solid var(--line);
+  background:linear-gradient(90deg,#440154,#472D7B,#3B528B,#2C728E,#21918C,#28AE80,#5EC962,#ADDC30,#FDE725)}
 .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);
   font-size:12px;padding:5px 9px;border-radius:3px;white-space:nowrap;opacity:0;
   transition:opacity .1s;z-index:5}
@@ -385,6 +385,21 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
 .spin{width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);
   border-radius:50%;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+
+<style>
+/* --- categorical palette: one distinct colour per lineage (matches figure legend) --- */
+:root,[data-theme]{
+  --l-cm:#E4508F; --l-fb:#2FA871; --l-ec:#8B7FD4; --l-myeloid:#4CAF50;
+  --l-mural:#3FA9E0; --l-lymphoid:#A8A32E; --l-epi:#2ECBC4; --l-neuro:#F0705B;
+  --l-lec:#C77FC0; --l-mast:#2F3E9E; --l-prolif:#E8A33D; --l-adipo:#8C6239;
+  --seq0:#440154;--seq1:#472D7B;--seq2:#3B528B;--seq3:#2C728E;--seq4:#21918C;
+  --seq5:#28AE80;--seq6:#5EC962;--seq7:#ADDC30;--seq8:#FDE725;
+  --grey-out:#C3CAD2;
+}
+[data-theme="dark"]{--grey-out:#39424E}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--grey-out:#39424E}}
+.dot{box-shadow:0 0 0 1px rgba(0,0,0,.10)}
 </style>
 <div class="topbar">
   <div class="container">
