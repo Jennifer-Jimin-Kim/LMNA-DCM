@@ -19,9 +19,14 @@ var expr=new Uint8Array(bytes.buffer,bytes.byteOffset+off,N*G);
 
 /* ---- lineage colour map (fixed order by size) ---- */
 var LN_ORDER=S.lineages.map(function(d){return d.name;});
-var SLOTS=['--d1','--d2','--d3','--d4','--d5','--d6'];
-var lnColor={},lnLabel={};
-LN_ORDER.forEach(function(name,i){ lnColor[name]= i<6?SLOTS[i]:'--d0'; });
+var LN_VAR={'Cardiomyocyte':'--l-cm','Fibroblast':'--l-fb','Endothelial':'--l-ec',
+ 'Myeloid':'--l-myeloid','Mural':'--l-mural','Lymphoid':'--l-lymphoid',
+ 'Epicardial':'--l-epi','Neuronal':'--l-neuro','Lymphatic EC':'--l-lec',
+ 'Mast':'--l-mast','Proliferating':'--l-prolif','Adipocyte':'--l-adipo'};
+var SPARE=['--l-cm','--l-fb','--l-ec','--l-myeloid','--l-mural','--l-lymphoid',
+ '--l-epi','--l-neuro','--l-lec','--l-mast','--l-prolif','--l-adipo'];
+var lnColor={};
+LN_ORDER.forEach(function(name,i){ lnColor[name]=LN_VAR[name]||SPARE[i%SPARE.length]; });
 var LN_CATS=A.ln_cats;
 function lineageVar(code){return lnColor[LN_CATS[code]]||'--d0';}
 
@@ -35,6 +40,14 @@ function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h
   return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
 function mix(a,b,t){var A1=hexToRgb(a),B=hexToRgb(b);
   return 'rgb('+Math.round(A1[0]+(B[0]-A1[0])*t)+','+Math.round(A1[1]+(B[1]-A1[1])*t)+','+Math.round(A1[2]+(B[2]-A1[2])*t)+')';}
+var SEQ=['#440154','#472D7B','#3B528B','#2C728E','#21918C','#28AE80','#5EC962','#ADDC30','#FDE725'];
+var SEQRGB=SEQ.map(hexToRgb), RAMP=new Array(256);
+(function(){for(var i=0;i<256;i++){
+  var t=i/255*(SEQRGB.length-1), k=Math.min(SEQRGB.length-2,Math.floor(t)), f=t-k;
+  var a=SEQRGB[k],b=SEQRGB[k+1];
+  RAMP[i]='rgb('+Math.round(a[0]+(b[0]-a[0])*f)+','+Math.round(a[1]+(b[1]-a[1])*f)+','+Math.round(a[2]+(b[2]-a[2])*f)+')';
+}})();
+function seq(t){return RAMP[Math.max(0,Math.min(255,Math.round(t*255)))];}
 function fmt(n){return n.toLocaleString();}
 
 /* ---- hero stats ---- */
@@ -83,7 +96,7 @@ function drawUmap(canvas,dsCode,radius){
   function py(i){return P.oy+(1-xy[i*2+1]/65535)*P.dh;}
   if(mode==='expr'){
     /* grey base so the embedding stays readable */
-    ctx.fillStyle=base;ctx.globalAlpha=0.55;
+    ctx.fillStyle=css('--grey-out');ctx.globalAlpha=0.85;
     for(var a=0;a<order.length;a++){
       ctx.beginPath();ctx.arc(px(order[a]),py(order[a]),radius*0.94,0,6.2832);ctx.fill();
     }
@@ -96,16 +109,16 @@ function drawUmap(canvas,dsCode,radius){
       if(lvl<0.04)continue;
       var on=(highlight===null)||(LN_CATS[lnArr[j]]===highlight);
       if(!on)continue;
-      ctx.fillStyle=mix(lo,hi,Math.pow(lvl,0.7));
-      ctx.globalAlpha=0.45+lvl*0.55;
-      ctx.beginPath();ctx.arc(px(j),py(j),radius*1.18,0,6.2832);ctx.fill();
+      ctx.fillStyle=seq(Math.pow(lvl,0.65));
+      ctx.globalAlpha=1;
+      ctx.beginPath();ctx.arc(px(j),py(j),radius*1.25,0,6.2832);ctx.fill();
     }
   }else{
     for(var c=0;c<order.length;c++){
       var k=order[c];
       var onk=(highlight===null)||(LN_CATS[lnArr[k]]===highlight);
-      ctx.fillStyle=onk?colOf(lineageVar(lnArr[k])):dim;
-      ctx.globalAlpha=onk?0.78:0.4;
+      ctx.fillStyle=onk?colOf(lineageVar(lnArr[k])):css('--grey-out');
+      ctx.globalAlpha=onk?0.95:0.5;
       ctx.beginPath();ctx.arc(px(k),py(k),onk?radius*1.12:radius*0.82,0,6.2832);ctx.fill();
     }
   }
@@ -175,7 +188,7 @@ function renderOverview(){
   function colOf(v){if(!cache[v])cache[v]=css(v);return cache[v];}
   for(var i=0;i<N;i++){
     ctx.fillStyle=colOf(lineageVar(lnArr[i]));
-    ctx.globalAlpha=0.68;
+    ctx.globalAlpha=0.95;
     ctx.beginPath();
     ctx.arc(P.ox+xy[i*2]/65535*P.dw,P.oy+(1-xy[i*2+1]/65535)*P.dh,1.9*ptScale,0,6.2832);
     ctx.fill();
@@ -226,11 +239,11 @@ function renderThumbs(){
     var ctx=cv.getContext('2d');
     ctx.setTransform(dpr,0,0,dpr,0,0);
     ctx.fillStyle=css('--chart-surface')||'#fff';ctx.fillRect(0,0,w,h);
-    var on=css(lnColor[l.name]||'--d0'), dim=css('--line');
+    var on=css(lnColor[l.name]||'--d0'), dim=css('--grey-out');
     var P=project(w,h);
     for(var i=0;i<N;i+=2){
       var hit=LN_CATS[lnArr[i]]===l.name;
-      ctx.fillStyle=hit?on:dim;ctx.globalAlpha=hit?0.9:0.55;
+      ctx.fillStyle=hit?on:dim;ctx.globalAlpha=hit?1:0.45;
       ctx.beginPath();
       ctx.arc(P.ox+xy[i*2]/65535*P.dw,P.oy+(1-xy[i*2+1]/65535)*P.dh,hit?1.4:0.9,0,6.2832);
       ctx.fill();
