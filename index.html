@@ -12,7 +12,7 @@
   --accent:#9E1B32; --accent-soft:#FBEFF1;
   --teal:#0A8DA0; --indigo:#3B5BA9; --amber:#A9761E;
   --d1:#3B5BA9; --d2:#B07A1C; --d3:#0A8DA0; --d4:#9E1B32; --d5:#7A5EA8; --d6:#3E8E5F; --d0:#93A0AE;
-  --coh1:#3B5BA9; --coh2:#9E1B32;
+  --coh1:#5B3E96; --coh2:#E0A21A;
   --seq-lo:#E9EDF5; --seq-hi:#16336B;
   --chart-surface:#FFFFFF;
   --r:4px; --r-lg:9px;
@@ -25,7 +25,7 @@
     --accent:#E0526B; --accent-soft:#2A1418;
     --teal:#2FA3AE; --indigo:#7D9AE0; --amber:#D3A155;
     --d1:#6E8CD4; --d2:#B98736; --d3:#2FA3AE; --d4:#D4485F; --d5:#9B82D2; --d6:#4CA674; --d0:#5F6B78;
-    --coh1:#6E8CD4; --coh2:#B98736;
+    --coh1:#9074D6; --coh2:#E8B44A;
     --seq-lo:#1D2430; --seq-hi:#8FB3F0;
     --chart-surface:#151B24;
   }
@@ -37,7 +37,7 @@
   --accent:#E0526B; --accent-soft:#2A1418;
   --teal:#2FA3AE; --indigo:#7D9AE0; --amber:#D3A155;
   --d1:#6E8CD4; --d2:#B98736; --d3:#2FA3AE; --d4:#D4485F; --d5:#9B82D2; --d6:#4CA674; --d0:#5F6B78;
-  --coh1:#6E8CD4; --coh2:#B98736;
+  --coh1:#9074D6; --coh2:#E8B44A;
   --seq-lo:#1D2430; --seq-hi:#8FB3F0;
   --chart-surface:#151B24;
 }
@@ -372,6 +372,43 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
 <style>
 .figplate.figsmall{max-width:620px;margin-left:auto;margin-right:auto}
 .figplate.figsmall img{width:100%;display:block}
+.sumsplit{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+@media(max-width:860px){.sumsplit{grid-template-columns:1fr}}
+.sumsplit .sumlead{margin-top:0}
+.sumfig{margin:0}
+.sumfig img{width:100%;display:block;border:1px solid var(--line);border-radius:var(--r-lg);background:#fff}
+.sumfig figcaption{margin-top:9px;font-size:12.5px;line-height:1.55;color:var(--muted)}
+.cwrap{position:relative}
+.zoomctl{position:absolute;right:9px;bottom:9px;display:flex;gap:4px;opacity:0;transition:opacity .15s}
+.cwrap:hover .zoomctl{opacity:1}
+.zoomctl button{width:26px;height:26px;border:1px solid var(--line);background:var(--surface);
+  color:var(--muted);border-radius:5px;cursor:pointer;font-size:14px;line-height:1;
+  display:grid;place-items:center;padding:0}
+.zoomctl button:hover{color:var(--ink);border-color:var(--rule-strong)}
+.zoomctl button:disabled{opacity:.4;cursor:default}
+.umap{cursor:grab}
+.spnote{margin:0 0 14px;font-size:13px;color:var(--muted);min-height:19px}
+.carousel{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.carousel>button{width:30px;height:30px;border:1px solid var(--line);background:var(--surface);
+  color:var(--muted);border-radius:6px;cursor:pointer;font-size:17px;line-height:1;padding:0}
+.carousel>button:hover{color:var(--ink)}
+.carousel .dots{display:flex;gap:6px;flex-wrap:wrap}
+.carousel .dots button{padding:5px 11px;font-size:12.5px;border:1px solid var(--line);
+  background:var(--surface);color:var(--muted);border-radius:999px;cursor:pointer}
+.carousel .dots button[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.carousel .which{margin-left:auto;font-size:12.5px;color:var(--faint)}
+.panels.single .panel.wide .umap{height:520px}
+.pager{display:flex;gap:5px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.pager button{min-width:30px;height:30px;padding:0 8px;border:1px solid var(--line);
+  background:var(--surface);color:var(--muted);border-radius:6px;cursor:pointer;font-size:12.5px}
+.pager button[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pager button:disabled{opacity:.4;cursor:default}
+.pager span{color:var(--faint);padding:0 2px}
+.pubcard p.tight{font-size:13.5px;line-height:1.62}
+.instplate img{max-width:100%;max-height:64px;object-fit:contain;display:block;margin:0 auto}
+.instrow.four{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.instrow.four{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.instrow.four{grid-template-columns:1fr}}
 .panels.quad{grid-template-columns:repeat(2,1fr)}
 @media(max-width:820px){.panels.quad{grid-template-columns:1fr}}
 .panels.quad .umap{height:340px}
@@ -469,11 +506,15 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
 
 <section id="summary">
   <div class="shead"><div><h2>Summary</h2></div></div>
-  <p class="sumlead">A spatial and single-cell multi-omics atlas of Lamin A/C-related dilated cardiomyopathy. Single-nucleus profiles from Stanford LMNA-DCM hearts are harmonised with published human and mouse laminopathy cohorts, and paired with Visium sections so a cell state defined in dissociated data can be located back in intact myocardium.</p>
-  <div class="figplate figsmall">
-    <img src="img/trichrome.png" alt="Masson's trichrome staining of control and LMNA-DCM myocardium">
+  <div class="sumsplit">
+    <div>
+      <p class="sumlead">A spatial and single-cell multi-omics atlas of Lamin A/C-related dilated cardiomyopathy. Single-nucleus profiles from Stanford LMNA-DCM hearts are harmonised with published human and mouse laminopathy cohorts, and paired with Visium sections so a cell state defined in dissociated data can be located back in intact myocardium.</p>
+    </div>
+    <figure class="sumfig">
+      <img src="img/trichrome.png" alt="Masson's trichrome staining of control and LMNA-DCM myocardium">
+      <figcaption>Masson&rsquo;s trichrome staining of control and LMNA-DCM myocardium. Collagen (blue) accumulates in the interstitial and perivascular compartments in LMNA-DCM.</figcaption>
+    </figure>
   </div>
-  <p class="figcap"><b>Figure.</b> Masson&rsquo;s trichrome staining of cardiac tissue from control and LMNA-DCM patients. Collagen (blue) accumulates in interstitial and perivascular compartments in LMNA-DCM.</p>
   <div class="sumpoints">
     <div class="sp"><div class="h">Zonal map of injury</div><div class="d">Spatial transcriptomic mapping delineates zonal tiers of fibrosis and DNA-damage burden across the myocardial wall.</div></div>
     <div class="sp"><div class="h">Cross-species harmonisation</div><div class="d">Human and mouse laminopathy nuclei integrated under one annotation, with shared stress-state labels.</div></div>
@@ -496,7 +537,8 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
         <span class="n" id="ovN"></span>
       </span></div>
     <div class="obody">
-      <canvas id="overviewUmap" aria-label="UMAP of the full atlas with cell states labelled"></canvas>
+      <div class="cwrap"><canvas id="overviewUmap" aria-label="UMAP of the full atlas with cell states labelled"></canvas>
+        <div class="zoomctl"><button type="button" onclick="__zoomBtn('overviewUmap','in',__renderAll)">+</button><button type="button" onclick="__zoomBtn('overviewUmap','out',__renderAll)">−</button><button type="button" onclick="__zoomBtn('overviewUmap','reset',__renderAll)">⟳</button></div></div>
       <div class="olegend"><h5>Lineages</h5><div id="olegend"></div></div>
     </div>
   </div>
@@ -534,22 +576,25 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
     <div class="panels" id="panelsSplit">
       <div class="panel">
         <div class="ptitle"><i class="dot" style="background:var(--coh1)"></i><span id="cohA">Control</span><span class="n" id="cohAn"></span></div>
-        <canvas class="umap" id="umapA" aria-label="UMAP of control nuclei"></canvas>
+        <div class="cwrap"><canvas class="umap" id="umapA" aria-label="UMAP of control nuclei"></canvas>
         <div class="tip" id="tipA"></div>
+        <div class="zoomctl"><button type="button" onclick="__zoomBtn('umapA','in',__renderAll)">+</button><button type="button" onclick="__zoomBtn('umapA','out',__renderAll)">−</button><button type="button" onclick="__zoomBtn('umapA','reset',__renderAll)">⟳</button></div></div>
       </div>
       <div class="panel">
         <div class="ptitle"><i class="dot" style="background:var(--coh2)"></i><span id="cohB">LMNA-DCM</span><span class="n" id="cohBn"></span></div>
-        <canvas class="umap" id="umapB" aria-label="UMAP of LMNA-DCM nuclei"></canvas>
+        <div class="cwrap"><canvas class="umap" id="umapB" aria-label="UMAP of LMNA-DCM nuclei"></canvas>
         <div class="tip" id="tipB"></div>
+        <div class="zoomctl"><button type="button" onclick="__zoomBtn('umapB','in',__renderAll)">+</button><button type="button" onclick="__zoomBtn('umapB','out',__renderAll)">−</button><button type="button" onclick="__zoomBtn('umapB','reset',__renderAll)">⟳</button></div></div>
       </div>
     </div>
     <div class="panels single" id="panelSingle" hidden>
       <div class="panel">
         <div class="ptitle"><i class="dot" id="soloDot" style="background:var(--ink)"></i><span id="soloTitle">All nuclei</span><span class="n" id="soloN"></span></div>
         <div class="solobody">
-          <div style="position:relative">
+          <div class="cwrap">
             <canvas class="umap solo" id="umapSolo" aria-label="UMAP"></canvas>
             <div class="tip" id="tipSolo"></div>
+            <div class="zoomctl"><button type="button" onclick="__zoomBtn('umapSolo','in',__renderAll)">+</button><button type="button" onclick="__zoomBtn('umapSolo','out',__renderAll)">−</button><button type="button" onclick="__zoomBtn('umapSolo','reset',__renderAll)">⟳</button></div>
           </div>
           <div class="sololeg"><h5>Lineages in view</h5><div id="soloLeg"></div></div>
         </div>
@@ -587,7 +632,8 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
   </div>
   <div class="explorer">
     <div class="toolbar">
-      <label class="search" style="max-width:210px">
+      <div class="suggest" id="spChips" role="group" aria-label="Zonation genes"></div>
+      <label class="search" style="max-width:190px">
         <span aria-hidden="true" style="color:var(--faint)">⌕</span>
         <select id="spGene" aria-label="Gene to display"></select>
       </label>
@@ -598,8 +644,20 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
       <div class="seg" role="group" aria-label="Background">
         <button type="button" id="spImg" aria-pressed="true">H&amp;E on</button>
       </div>
+      <div class="seg" role="group" aria-label="Layout" id="spViewSeg">
+        <button type="button" data-spview="single" aria-pressed="true">One section</button>
+        <button type="button" data-spview="grid" aria-pressed="false">All four</button>
+      </div>
     </div>
-    <div class="panels quad" id="spatialPanels"></div>
+    <p class="spnote" id="spNote"></p>
+    <div class="carousel" id="spNav">
+      <button type="button" id="spPrev" aria-label="Previous section">‹</button>
+      <div class="dots" id="spDots"></div>
+      <button type="button" id="spNext" aria-label="Next section">›</button>
+      <span class="which" id="spWhich"></span>
+    </div>
+    <div class="panels single" id="spSingle"></div>
+    <div class="panels quad" id="spGrid" hidden></div>
     <div class="efoot">
       <div class="legend"><span><i class="dot" style="background:var(--coh1)"></i>Control</span><span><i class="dot" style="background:var(--coh2)"></i>LMNA-DCM</span></div>
       <div class="scale"><span>Low</span><span class="scalebar"></span><span>High</span><span id="spScaleGene" style="margin-left:5px;color:var(--muted)"></span></div>
@@ -663,6 +721,9 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
         </table>
         <div class="empty" id="sampleEmpty" hidden>No samples match these filters.</div>
       </div>
+      <div class="pager" id="samplePager" hidden></div>
+      <div hidden>
+      </div>
     </div>
   </div>
 </section>
@@ -712,7 +773,7 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
     <div class="pubcard">
       <h4>Spatial transcriptomics highlights regional DNA damage in LMNA-linked dilated cardiomyopathy</h4>
       <p class="meta2">Siyeon Rhee, Sangkyun Cho, …, Joseph C. Wu · Unpublished, 2025</p>
-      <p>Visium spatial profiling is combined with joint single-nucleus RNA/ATAC sequencing to chart myocardial damage tiers where cardiomyocyte stress trajectories, DNA damage response and ECM remodelling rise in concert. Patient-derived LMNA iPSC-CMs reveal a mechanosensitive loop — nuclear blebbing, rupture and increasing γH2AX foci — reversible with blebbistatin unloading. The same trajectory exhibits PARP1 hyperactivation and NAD<sup>+</sup> depletion, pointing to mechano-metabolic interventions.</p>
+      <p class="tight">Visium spatial profiling is combined with joint single-nucleus RNA/ATAC sequencing to chart myocardial damage tiers where cardiomyocyte stress trajectories, DNA damage response and ECM remodelling rise in concert. Patient-derived LMNA iPSC-CMs reveal a mechanosensitive loop — nuclear blebbing, rupture and increasing γH2AX foci — reversible with blebbistatin unloading. The same trajectory exhibits PARP1 hyperactivation and NAD<sup>+</sup> depletion, pointing to mechano-metabolic interventions.</p>
       <div class="chips">
         <a class="btn solid" href="#">Publication</a>
         <a class="btn outline" href="#">PDF</a>
@@ -730,25 +791,27 @@ footer .fine{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);
 
   <div class="instrow">
     <div class="instcard">
-      <div class="instplate"><span class="logoph">Stanford Cardiovascular Institute</span></div>
+      <div class="instplate"><img src="img/logo-cvi.png" alt="Stanford Cardiovascular Institute"></div>
       <div><div class="nm">Joseph Wu Lab, Stanford CVI</div>
         <div class="ro">Specimen provision and data generation</div></div>
     </div>
     <div class="instcard">
-      <div class="instplate"><span class="logoph">Korea University</span></div>
+      <div class="instplate"><img src="img/logo-ku.png" alt="Korea University"></div>
       <div><div class="nm">Rhee Lab, Korea University</div>
         <div class="ro">Computational analysis and atlas curation</div></div>
     </div>
   </div>
 
   <p class="sline" style="margin-top:26px">Supported by:</p>
-  <div class="instrow">
-    <div class="instcard"><div class="instplate"><span class="logoph">Stanford Cardiovascular Institute</span></div>
+  <div class="instrow four">
+    <div class="instcard"><div class="instplate"><img src="img/logo-cvi.png" alt="Stanford Cardiovascular Institute"></div>
       <div><div class="nm">Stanford Cardiovascular Institute</div></div></div>
-    <div class="instcard"><div class="instplate"><span class="logoph">Stanford Medicine</span></div>
+    <div class="instcard"><div class="instplate"><img src="img/logo-med.png" alt="Stanford Medicine"></div>
       <div><div class="nm">Stanford Medicine</div></div></div>
-    <div class="instcard"><div class="instplate"><span class="logoph">NIH NHLBI</span></div>
+    <div class="instcard"><div class="instplate"><img src="img/logo-nhlbi.png" alt="NIH National Heart, Lung, and Blood Institute"></div>
       <div><div class="nm">NIH NHLBI</div></div></div>
+    <div class="instcard"><div class="instplate"><img src="img/logo-ku.png" alt="Korea University"></div>
+      <div><div class="nm">Korea University</div></div></div>
   </div>
 
   <div class="people">
